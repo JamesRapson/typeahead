@@ -7,18 +7,18 @@ export type ListItem = {
   label: string;
 };
 
-export type SimpleListProps<T> = {
+export type SimpleListProps = {
   onSelect: (index: number) => void;
   noResultsText?: string;
-  selectedIndex?: number;
+  selectedChildIndex?: number;
 };
 
-export const SimpleList = <T extends ListItem>({
+export const SimpleList = ({
   onSelect,
   noResultsText = "No items",
-  selectedIndex,
+  selectedChildIndex,
   children,
-}: PropsWithChildren<SimpleListProps<T>>) => {
+}: PropsWithChildren<SimpleListProps>) => {
   return (
     <div className="simpleList">
       {React.Children.count(children) === 0 ? (
@@ -26,7 +26,9 @@ export const SimpleList = <T extends ListItem>({
       ) : (
         React.Children.map(children, (child, index) => (
           <div
-            className={`item ${index === selectedIndex ? "selectedItem" : ""}`}
+            className={`item ${
+              index === selectedChildIndex ? "selectedItem" : ""
+            }`}
             onClick={() => onSelect(index)}
           >
             {child}

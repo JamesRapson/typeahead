@@ -12,7 +12,11 @@ interface SearchItem extends TwitterProfileItem, SearchResultItem {
   label: string;
 }
 
-const doTwitterSearch = async (searchString: string) => {
+const itemRenderFn = (twitterItem: SearchItem) => {
+  return <TwitterProfileCard twitterItem={twitterItem} />;
+};
+
+const handleTwitterSearch = async (searchString: string) => {
   const results = await searchTwitterProfiles(searchString);
   console.info(`${results.length} results for search string '${searchString}'`);
   return results.map<SearchItem>((res) => ({ ...res, label: res.screen_name }));
@@ -21,19 +25,15 @@ const doTwitterSearch = async (searchString: string) => {
 export const TwitterSearch = () => {
   const [selectedItem, setSelectedItem] = useState<TwitterProfileItem>();
 
-  const onValueSelected = (twitterItem: SearchItem) => {
+  const handleItemSelected = (twitterItem: SearchItem) => {
     setSelectedItem(twitterItem);
-  };
-
-  const itemRenderFn = (twitterItem: SearchItem) => {
-    return <TwitterProfileCard twitterItem={twitterItem} />;
   };
 
   return (
     <div className="twitterSearch">
       <TypeaheadSearch
-        onSearch={doTwitterSearch}
-        onSelected={onValueSelected}
+        onSearch={handleTwitterSearch}
+        onSelected={handleItemSelected}
         itemRenderFn={itemRenderFn}
         placeHolderText="Search Twitter users..."
       />

@@ -3,7 +3,7 @@ import { useDebouncedSearch } from "../hooks/useDebouncedSearch";
 import { useDetectClickOutside } from "../hooks/useDetectClickOutside";
 import { SearchFunction, SearchResultItem } from "../types";
 import { ShadowTextbox } from "./ShadowTextbox";
-import { ListItem, SimpleList } from "./SimpleList";
+import { SimpleList } from "./SimpleList";
 import "./TypeaheadSearch.css";
 
 const defaultText = "Type to search";
@@ -11,7 +11,7 @@ const defaultText = "Type to search";
 export type TypeaheadSearchProps<T> = {
   onSearch: SearchFunction<T>; // Function that performs the search and returns the matching items
   onSelected: (item: T) => void; // Function that will be called when user selects an item
-  itemRenderFn: (item: T) => JSX.Element; // Function to render serach result items to show in a list
+  itemRenderFn: (item: T) => JSX.Element; // Function to render a search result item
   placeHolderText?: string;
 };
 
@@ -23,7 +23,7 @@ export const TypeaheadSearch = <T extends SearchResultItem>({
 }: TypeaheadSearchProps<T>) => {
   const [searchString, setSearchString] = useState<string>();
   const [selectedValue, setSelectedValue] = useState<T>();
-  const [shadowText, setShadowText] = useState<string | undefined>();
+  const [shadowText, setShadowText] = useState<string>();
   const [text, setText] = useState<string>();
   const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
 
@@ -67,7 +67,7 @@ export const TypeaheadSearch = <T extends SearchResultItem>({
     setText(searchResults?.[highlightedIndex]?.label);
   }, [highlightedIndex, searchResults]);
 
-  const onKeyDown = (event: React.KeyboardEvent) => {
+  const handleKeyDown = (event: React.KeyboardEvent) => {
     if (!searchResults || searchResults.length === 0) return;
 
     if (event.key === "ArrowUp" || event.key === "ArrowDown") {
@@ -98,7 +98,7 @@ export const TypeaheadSearch = <T extends SearchResultItem>({
     }
   };
 
-  const onSearchStringChange = (str: string) => {
+  const handleSearchStringChange = (str: string) => {
     if (selectedValue) {
       // Clear any selected value when we have a new search
       setSelectedValue(undefined);
@@ -110,7 +110,7 @@ export const TypeaheadSearch = <T extends SearchResultItem>({
     setText(str);
   };
 
-  const onFocus = () => {
+  const handleFocus = () => {
     // clear existing values when gets focues
     setHasFocus(true);
     setText("");
@@ -119,7 +119,7 @@ export const TypeaheadSearch = <T extends SearchResultItem>({
     setSelectedValue(undefined);
   };
 
-  const onSearchResultSelected = (index: number) => {
+  const handleResultSelected = (index: number) => {
     // User has selected a search value from the dropdown list
     const selectedItem = searchResults?.[index];
     if (selectedItem) selectValue(selectedItem.id);
@@ -139,17 +139,17 @@ export const TypeaheadSearch = <T extends SearchResultItem>({
       <ShadowTextbox
         text={text}
         shadowText={shadowText}
-        onFocus={onFocus}
-        onKeyDown={onKeyDown}
-        onChange={onSearchStringChange}
+        onFocus={handleFocus}
+        onKeyDown={handleKeyDown}
+        onChange={handleSearchStringChange}
         showSpinner={isSearching}
         placeHolderText={placeHolderText}
       />
 
       {searchResults && !selectedValue && (
         <SimpleList
-          onSelect={onSearchResultSelected}
-          selectedIndex={highlightedIndex}
+          onSelect={handleResultSelected}
+          selectedChildIndex={highlightedIndex}
           noResultsText="No match"
         >
           {searchResults?.map((item) => itemRenderFn(item))}

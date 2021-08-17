@@ -1,5 +1,3 @@
-import { SearchResultItem } from "../types";
-
 const TwitterSearchUrl =
   "https://typeahead-js-twitter-api-proxy.herokuapp.com/demo/search";
 

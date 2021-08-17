@@ -15,7 +15,7 @@ export const useDebouncedSearch = <T extends any>(
   const [searchResults, setSearchResults] = useState<T[]>();
   const [isSearching, setIsSearching] = useState<boolean>(false);
 
-  const executeCallback = useCallback(
+  const searchCallback = useCallback(
     (searchString: string) => {
       return searchFunction(searchString);
     },
@@ -33,7 +33,7 @@ export const useDebouncedSearch = <T extends any>(
     setIsSearching(true);
     debounce(
       () =>
-        executeCallback(searchString)
+        searchCallback(searchString)
           .then((result) => {
             setIsSearching(false);
             if (stale) {
@@ -56,7 +56,7 @@ export const useDebouncedSearch = <T extends any>(
     return () => {
       stale = true; // flag the request as being stale
     };
-  }, [searchString, executeCallback, interval]);
+  }, [searchString, searchCallback, interval]);
 
   return { isSearching, searchResults };
 };
