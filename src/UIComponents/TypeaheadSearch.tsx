@@ -11,7 +11,7 @@ const defaultText = "Type to search";
 export type TypeaheadSearchProps<T> = {
   onSearch: SearchFunction<T>; // Function that performs the search and returns the matching items
   onSelected: (item: T) => void; // Function that will be called when user selects an item
-  itemRenderFn?: (item: T) => JSX.Element; // Function to render serach result items to show in a list
+  itemRenderFn: (item: T) => JSX.Element; // Function to render serach result items to show in a list
   placeHolderText?: string;
 };
 
@@ -119,9 +119,10 @@ export const TypeaheadSearch = <T extends SearchResultItem>({
     setSelectedValue(undefined);
   };
 
-  const onSearchResultValueSelected = (item: ListItem) => {
+  const onSearchResultSelected = (index: number) => {
     // User has selected a search value from the dropdown list
-    selectValue(item.id);
+    const selectedItem = searchResults?.[index];
+    if (selectedItem) selectValue(selectedItem.id);
   };
 
   const selectValue = (selectedId: string) => {
@@ -132,9 +133,6 @@ export const TypeaheadSearch = <T extends SearchResultItem>({
     setShadowText(undefined);
     if (selected) onSelected(selected);
   };
-
-  const highlightedResult =
-    highlightedIndex === -1 ? undefined : searchResults?.[highlightedIndex];
 
   return (
     <div ref={rootRef} className="typeaheadSearch">
@@ -150,12 +148,12 @@ export const TypeaheadSearch = <T extends SearchResultItem>({
 
       {searchResults && !selectedValue && (
         <SimpleList
-          onSelect={onSearchResultValueSelected}
-          items={searchResults}
-          selectedItem={highlightedResult}
-          itemRenderFn={itemRenderFn}
+          onSelect={onSearchResultSelected}
+          selectedIndex={highlightedIndex}
           noResultsText="No match"
-        />
+        >
+          {searchResults?.map((item) => itemRenderFn(item))}
+        </SimpleList>
       )}
     </div>
   );

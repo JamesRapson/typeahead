@@ -1,3 +1,5 @@
+import React from "react";
+import { PropsWithChildren } from "react";
 import "./SimpleList.css";
 
 export type ListItem = {
@@ -6,32 +8,28 @@ export type ListItem = {
 };
 
 export type SimpleListProps<T> = {
-  onSelect: (value: T) => void;
-  items: T[];
+  onSelect: (index: number) => void;
   noResultsText?: string;
-  selectedItem?: T;
-  itemRenderFn?: (item: T) => JSX.Element; // Function to render the JSX for an item in the list
+  selectedIndex?: number;
 };
 
 export const SimpleList = <T extends ListItem>({
   onSelect,
-  items,
   noResultsText = "No items",
-  selectedItem,
-  itemRenderFn,
-}: SimpleListProps<T>) => {
+  selectedIndex,
+  children,
+}: PropsWithChildren<SimpleListProps<T>>) => {
   return (
     <div className="simpleList">
-      {items.length === 0 ? (
+      {React.Children.count(children) === 0 ? (
         <div>{noResultsText}</div>
       ) : (
-        items.map((item) => (
+        React.Children.map(children, (child, index) => (
           <div
-            key={item.id}
-            onClick={() => onSelect(item)}
-            className={`item ${item === selectedItem ? "selectedItem" : ""} `}
+            className={`item ${index === selectedIndex ? "selectedItem" : ""}`}
+            onClick={() => onSelect(index)}
           >
-            {itemRenderFn ? itemRenderFn(item) : item.label}
+            {child}
           </div>
         ))
       )}
