@@ -1,0 +1,60 @@
+.twitterProfileCard {
+  border-bottom: solid 1px gray;
+  width: 500px;
+}
+
+.twitterProfileCard .inner {
+  padding: 5px;
+}
+
+.twitterProfileCard .top {
+  display: flex;
+  flex-direction: row;
+}
+
+.twitterProfileCard .top-left {
+  display: flex;
+}
+
+.twitterProfileCard .profileImg {
+  border: 2px solid silver;
+  width: 48px;
+  height: 48px;
+}
+
+.twitterProfileCard .top-right {
+  display: flex;
+  flex-direction: column;
+  padding-left: 5px;
+  justify-content: flex-start;
+}
+
+.twitterProfileCard .bottom {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.twitterProfileCard .namesSection {
+  display: flex;
+  flex-direction: row;
+}
+
+.twitterProfileCard .name {
+  display: flex;
+  font-weight: 800;
+}
+
+.twitterProfileCard .screenName {
+  display: flex;
+  padding-left: 5px;
+}
+
+.twitterProfileCard .description {
+  text-align: left;
+}
+
+.twitterProfileCard .bottom .count-item {
+  display: flex;
+  padding: 2px 15px;
+}

@@ -1,0 +1,27 @@
+.shadowTextbox {
+  position: relative;
+  padding: 0;
+}
+.shadowTextbox .text {
+  z-index: 10;
+  opacity: 0.6;
+  width: 100%;
+  line-height: 30px;
+  padding: 2px;
+}
+
+.shadowTextbox .shadowText {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: -1;
+  opacity: 1;
+}
+
+.shadowTextbox .spinner {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  padding: 2px 0;
+  opacity: 1;
+}
